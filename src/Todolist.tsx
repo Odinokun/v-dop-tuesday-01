@@ -10,7 +10,7 @@ export type TaskType = {
 type PropsType = {
   todolistId: string;
   title: string;
-  tasks: Array<TaskType>;
+  tasks: TaskType[];
   removeTask: (todolistId: string, taskId: string) => void;
   changeFilter: (todolistId: string, value: FilterValuesType) => void;
   addTask: (todolistId: string, title: string) => void;
@@ -36,9 +36,8 @@ export function Todolist(props: PropsType) {
     }
   };
 
-  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) =>
     setTitle(e.currentTarget.value);
-  };
 
   const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
     setError(null);
@@ -53,15 +52,13 @@ export function Todolist(props: PropsType) {
   const onCompletedClickHandler = () =>
     props.changeFilter(props.todolistId, 'completed');
 
-  const removeTodolistHandler = () => {
-    props.removeTodolist(props.todolistId);
-  };
+  const removeTodolistHandler = () => props.removeTodolist(props.todolistId);
 
   return (
     <div>
       <h3>
         {props.title}
-        <button onClick={removeTodolistHandler}>X</button>
+        <button onClick={removeTodolistHandler}>Del todo</button>
       </h3>
       <div>
         <input
@@ -70,7 +67,7 @@ export function Todolist(props: PropsType) {
           onKeyDown={onKeyPressHandler}
           className={error ? 'error' : ''}
         />
-        <button onClick={addTask}>+</button>
+        <button onClick={addTask}>add</button>
         {error && <div className='error-message'>{error}</div>}
       </div>
       <ul>
@@ -86,13 +83,13 @@ export function Todolist(props: PropsType) {
 
           return (
             <li key={t.id} className={t.isDone ? 'is-done' : ''}>
+              <button onClick={onClickHandler}>del</button>
               <input
                 type='checkbox'
                 onChange={onChangeHandler}
                 checked={t.isDone}
               />
               <span>{t.title}</span>
-              <button onClick={onClickHandler}>x</button>
             </li>
           );
         })}
